@@ -25,6 +25,9 @@ namespace Financer
     {
         private static System.Timers.Timer aTimer;
         private List<Ticker> tickerList = new List<Ticker>();
+        private double prevPrice;
+        private double currPrice;
+        private double openPrice;
         public WatchlistWindow()
         {
             InitializeComponent();
@@ -85,18 +88,42 @@ namespace Financer
             foreach (Ticker ticker in tickerList)
             {
                 var securities = await Yahoo.Symbols(ticker.Name).Fields(Field.RegularMarketPrice).QueryAsync();
+                prevPrice = ticker.CurrPrice;
+                openPrice = ticker.OpenPrice;
                 ticker.CurrPrice = securities[ticker.Name].RegularMarketPrice + 1;
                 this.Dispatcher.Invoke(() =>
                 {
+                    currPrice = ticker.CurrPrice;
                     this.tickerListView.Items.Add(ticker);
-                    Console.WriteLine("K");
                 });
             }
+        }
+        private void ColorPrice(object sender, RoutedEventArgs e)
+        {
+            if (prevPrice < currPrice)
+                (sender as TextBlock).Foreground = Brushes.LimeGreen;
+            if(prevPrice > currPrice)
+                (sender as TextBlock).Foreground = Brushes.Red;
+            if(prevPrice == currPrice)
+                (sender as TextBlock).Foreground = Brushes.White;
+            currPrice = 0;
+            prevPrice = 0;
+            openPrice = 0;
+        }
+
+        private void ColorName(object sender, RoutedEventArgs e)
+        {
+            if (openPrice < currPrice)
+                (sender as TextBlock).Foreground = Brushes.LimeGreen;
+            if (openPrice > currPrice)
+                (sender as TextBlock).Foreground = Brushes.Red;
+            if (openPrice == currPrice)
+                (sender as TextBlock).Foreground = Brushes.White;
+            openPrice = 0;
         }
 
         private  string FormatNumber(long num)
         {
-            // Ensure number has max 3 significant digits (no rounding up can happen)
             long i = (long)Math.Pow(10, (int)Math.Max(0, Math.Log10(num) - 2));
             num = num / i * i;
 
