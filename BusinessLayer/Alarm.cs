@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Class for the creation of Alarms.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Financer
 {
-    class Alarm
+    public class Alarm
     {
         private int id;
         private string ticker;

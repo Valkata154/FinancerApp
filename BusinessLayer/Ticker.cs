@@ -1,18 +1,28 @@
-﻿using System;
+﻿/*
+ * Class for the creation of Tickers.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YahooFinanceApi;
 
 namespace Financer
 {
     public class Ticker
     {
+        private int id;
         private string name;
         private double currPrice;
         private double openPrice;
         private string volume;
+
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
 
         public string Name
         {

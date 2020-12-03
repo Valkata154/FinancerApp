@@ -23,14 +23,18 @@ namespace Financer
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
+        // Open watchlist.
         private void OpenWatchlist(object sender, RoutedEventArgs e)
         {
             WatchlistWindow watchWin = new WatchlistWindow();
+            watchWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             watchWin.Show();
         }
 
+        // Open alarms window.
         private void CreateAlarm(object sender, RoutedEventArgs e)
         {
             AlarmWindow alarmWin = new AlarmWindow();

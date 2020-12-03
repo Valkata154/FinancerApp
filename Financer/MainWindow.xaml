@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Financer"
         mc:Ignorable="d"
-        Title="Financer" Height="450" Width="800"
+        Title="Financer" Height="250" Width="400"
         ResizeMode="NoResize">
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/watchlistBackground.png"></ImageBrush>
+    </Window.Background>
     <Grid>
-        <Label Content="Financer" Name="lblTitle" Margin="325,0,0,25" FontFamily="Times New Roman" FontSize="30" FontWeight="Bold" />
-        <Button Content="Open Watchlist" Name="btnOpenWatchlist" Click="OpenWatchlist" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="325,69,329,290"/>
-        <Button Content="Alarms" Name="btnCreateAlarm" Click="CreateAlarm" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="325,130,329,240"/>
+        <Label Content="Financer"  Foreground="White" Name="lblTitle" Margin="125,0,133,25" FontFamily="Times New Roman" FontSize="30" FontWeight="Bold" />
+        <Button Content="Watchlist"  Foreground="White" BorderBrush="White" BorderThickness="2" Name="btnOpenWatchlist" Click="OpenWatchlist" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="130,66,142,100"/>
+        <Button Content="Alarms" Foreground="White" BorderBrush="White" BorderThickness="2" Name="btnCreateAlarm" Click="CreateAlarm" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="130,129,142,40"/>
     </Grid>
 </Window>

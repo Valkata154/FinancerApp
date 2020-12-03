@@ -26,6 +26,7 @@ namespace Financer
     /// </summary>
     public partial class AlarmWindow : Window
     {
+        // Variables
         private string connectionString;
         private SqlConnection connection;
         private List<Alarm> alarmsList = new List<Alarm>();
@@ -33,6 +34,7 @@ namespace Financer
         private string prevString = "";
         private int iteration = 1;
 
+        // Window init
         public AlarmWindow()
         {
             InitializeComponent();
@@ -41,6 +43,7 @@ namespace Financer
             StartTimer();
         }
 
+        // Open add alarm window.
         private void OpenAddAlarmWindow(object sender, RoutedEventArgs e)
         {
             AddAlarmWindow addAlarmWindow = new AddAlarmWindow();
@@ -49,6 +52,7 @@ namespace Financer
             this.Close();
         }
 
+        // Get all the alarms from the DB and populate the list view.
         public void PopulateData()
         {
             using (connection = new SqlConnection(connectionString))
@@ -72,6 +76,7 @@ namespace Financer
             }
         }
 
+        // Method to delete an alarm.
         public void DeleteAlarm(object sender, RoutedEventArgs e)
         {
             Alarm alarm = (Alarm)alarmListView.SelectedItem;
@@ -87,20 +92,22 @@ namespace Financer
             alarmListView.Items.Remove(alarmListView.SelectedItem);  
         }
 
+        // Message to send Whatsapp messages using Twillio.
         public void SendMessage(string messageBody)
         {
-            var accountSid = "Sid";
-            var authToken = "Token";
+            var accountSid = "YOUR_SID";
+            var authToken = "YOUR_TOKEN";
 
             TwilioClient.Init(accountSid, authToken);
 
             var message = MessageResource.Create(
                 body: messageBody,
                 from: new Twilio.Types.PhoneNumber("whatsapp:+14155238886"),
-                to: new Twilio.Types.PhoneNumber("whatsapp:+359895730322")
+                to: new Twilio.Types.PhoneNumber("whatsapp:YOUR_NUMBER")
             );
         }
 
+        // Timer for every 2secs to run the update price method.
         private void StartTimer()
         {
             aTimer = new Timer(2000);
@@ -109,6 +116,7 @@ namespace Financer
             aTimer.Enabled = true;
         }
 
+        // Method to go throught all the alarms and send notifications where needed.
         private async void UpdatePrices(Object source, ElapsedEventArgs e)
         {
             foreach (Alarm alarm in alarmsList)
@@ -118,6 +126,7 @@ namespace Financer
                 string aboveMessage = alarm.Ticker + " " + currPrice.ToString("#.##") + " is ABOVE " + alarm.Price + " alarm.";
                 string bellowMessage = alarm.Ticker + " " + currPrice.ToString("#.##") + " is BELLOW " + alarm.Price + " alarm.";
 
+                // ABOVE target.
                 if (currPrice >= alarm.Price && !alarm.NotifiedAbove && !(prevString.Equals(aboveMessage)))
                 {
                     if(iteration != 1)
@@ -126,6 +135,7 @@ namespace Financer
                     alarm.NotifiedAbove = true;
                     alarm.NotifiedBellow = false;
                 }
+                // BELLOW target.
                 else if (currPrice < alarm.Price && !alarm.NotifiedBellow &&!(prevString.Equals(bellowMessage)))
                 {
                     if (iteration != 1)
@@ -135,6 +145,7 @@ namespace Financer
                     alarm.NotifiedBellow = true;
                 }
             }
+            // First iteration won't be run due to flooding of messages.
             iteration++;
         }
     }

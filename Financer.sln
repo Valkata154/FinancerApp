@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financer", "Financer\Financer.csproj", "{FB3CACF1-57C9-47DE-9C43-BB605D810357}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "Financer\PresentationLayer.csproj", "{FB3CACF1-57C9-47DE-9C43-BB605D810357}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{F7F93933-5D68-49F2-8F2B-ECE257997336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{18E93AAA-D4AC-43EA-9DD0-E674BE3BE39F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FB3CACF1-57C9-47DE-9C43-BB605D810357}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB3CACF1-57C9-47DE-9C43-BB605D810357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB3CACF1-57C9-47DE-9C43-BB605D810357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F93933-5D68-49F2-8F2B-ECE257997336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F93933-5D68-49F2-8F2B-ECE257997336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F93933-5D68-49F2-8F2B-ECE257997336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F93933-5D68-49F2-8F2B-ECE257997336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E93AAA-D4AC-43EA-9DD0-E674BE3BE39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E93AAA-D4AC-43EA-9DD0-E674BE3BE39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E93AAA-D4AC-43EA-9DD0-E674BE3BE39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E93AAA-D4AC-43EA-9DD0-E674BE3BE39F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

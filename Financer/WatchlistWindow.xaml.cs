@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using YahooFinanceApi;
 using System.Timers;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Financer
 {
@@ -26,12 +29,16 @@ namespace Financer
         private double prevPrice;
         private double currPrice;
         private double openPrice;
+        private string connectionString;
+        private SqlConnection connection;
 
         // Initialize the component and start the timer.
         public WatchlistWindow()
         {
+            connectionString = ConfigurationManager.ConnectionStrings["SQLConnection"].ConnectionString;
             InitializeComponent();
             StartTimer();
+            LoadWatchlist();
         }
 
         // OnClosed method to stop the timer thread.
@@ -51,7 +58,24 @@ namespace Financer
             else
             {
                 if (!(this.txtBoxTicker.Text == ""))
-                    GetTicker(this.txtBoxTicker.Text);
+                {
+                    // Check whether the ticker already exists.
+                    bool alreadyAdded = false;
+                    foreach(Ticker t in tickerList)
+                    {
+                        if (t.Name.Equals(this.txtBoxTicker.Text))
+                            alreadyAdded = true;
+                    }
+                    if(!alreadyAdded)
+                    { 
+                        GetTicker(this.txtBoxTicker.Text);
+                        AddToDatabase(this.txtBoxTicker.Text);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ticker already exists in Watchlist.");
+                    }
+                }
                 this.txtBoxTicker.Visibility = Visibility.Hidden;
                 this.txtBoxTicker.Text = "";
             }
@@ -60,15 +84,78 @@ namespace Financer
         // Method to create the ticker from YahooFinance and add it to a list.
         private async void GetTicker(string name)
         {
-            var securities = await Yahoo.Symbols(name).Fields(Field.Symbol, Field.RegularMarketPrice, Field.RegularMarketVolume, Field.RegularMarketOpen, Field.FiftyTwoWeekHigh).QueryAsync();
-            var aapl = securities[name];
-            Ticker ticker = new Ticker();
-            ticker.Name = name;
-            ticker.CurrPrice = aapl.RegularMarketPrice;
-            ticker.OpenPrice = aapl.RegularMarketOpen;
-            ticker.Volume = FormatNumber(aapl.RegularMarketVolume);
-            tickerList.Add(ticker);
-            this.tickerListView.Items.Add(ticker);
+            try
+            {
+                var securities = await Yahoo.Symbols(name).Fields(Field.Symbol, Field.RegularMarketPrice, Field.RegularMarketVolume, Field.RegularMarketOpen, Field.FiftyTwoWeekHigh).QueryAsync();
+                var aapl = securities[name];
+                Ticker ticker = new Ticker();
+                ticker.Name = name;
+                ticker.CurrPrice = aapl.RegularMarketPrice;
+                ticker.OpenPrice = aapl.RegularMarketOpen;
+                ticker.Volume = FormatNumber(aapl.RegularMarketVolume);
+                tickerList.Add(ticker);
+                this.tickerListView.Items.Add(ticker);
+            }
+            // Check if the symbol name is valid. If not remove from DB.
+            catch
+            {
+                MessageBox.Show("Invalid Ticker symbol.");
+                string query = "DELETE FROM Ticker WHERE Name=@Name";
+
+                using (connection = new SqlConnection(connectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.ExecuteScalar();
+                }
+            }
+        }
+
+        // Method to delete an alarm.
+        public void DeleteAlarm(object sender, RoutedEventArgs e)
+        {
+            Ticker ticker = (Ticker)tickerListView.SelectedItem;
+            string query = "DELETE FROM Ticker WHERE Name=@Name";
+
+            using (connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+                command.Parameters.AddWithValue("@Name", ticker.Name);
+                command.ExecuteScalar();
+            }
+            tickerListView.Items.Remove(tickerListView.SelectedItem);
+            tickerList.Remove(ticker);
+        }
+
+        // Method to add to the DB
+        private void AddToDatabase(string name)
+        {
+            string query = "INSERT INTO Ticker VALUES (@Name)";
+
+            using (connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+                command.Parameters.AddWithValue("@Name", name);
+                command.ExecuteScalar();
+            }
+        }
+
+        // Method to load the listview when opening the window.
+        private void LoadWatchlist()
+        {
+            using (connection = new SqlConnection(connectionString))
+            using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Ticker", connection))
+            {
+                DataTable tickerTable = new DataTable();
+                adapter.Fill(tickerTable);
+                foreach (DataRow row in tickerTable.Rows)
+                {
+                    GetTicker(row.Field<string>(1));
+                }
+            }
         }
 
         // Method to start the 2sec timer and add the function.
@@ -110,7 +197,7 @@ namespace Financer
             if(prevPrice > currPrice)
                 (sender as TextBlock).Foreground = Brushes.Red;
             if(prevPrice == currPrice)
-                (sender as TextBlock).Foreground = Brushes.White;
+                (sender as TextBlock).Foreground = Brushes.Black;
             currPrice = 0;
             prevPrice = 0;
             openPrice = 0;
@@ -124,7 +211,7 @@ namespace Financer
             if (openPrice > currPrice)
                 (sender as TextBlock).Foreground = Brushes.Red;
             if (openPrice == currPrice)
-                (sender as TextBlock).Foreground = Brushes.White;
+                (sender as TextBlock).Foreground = Brushes.Black;
             openPrice = 0;
         }
 

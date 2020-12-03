@@ -7,46 +7,43 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Closed="Window_Closed"
-        Title="Watchlist" Height="900" Width="600">
-    <Window.Background>
-        <ImageBrush ImageSource="/Images/watchlistBackground.png"></ImageBrush>
-    </Window.Background>
+        Title="Watchlist" Background="LightGray" Height="900" Width="600">
     <Grid Name="Grid">
-        <Label Content="Watchlist" Name="lblTitle" Foreground="White" FontFamily="Times New Roman" FontSize="42" FontWeight="Bold" Margin="197,10,204,800" />
+        <Label Content="Watchlist" Name="lblTitle" Foreground="Black" FontFamily="Times New Roman" FontSize="42" FontWeight="Bold" Margin="197,10,204,800" />
         <Button Name="btnAddTicker" IsDefault="True" Click="OpenAddTicker"  Background="Transparent" BorderThickness="0" Width="35" Height="35" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 15, 15, 0">
             <StackPanel>
                 <Image Source="Images/addButton.png"/>
             </StackPanel>
         </Button>
-        <TextBox Name="txtBoxTicker" ForceCursor="True" Width="75" Visibility="Hidden" Height="25" FontFamily="Times New Roman" TextAlignment="Center" FontSize="18" FontWeight="Bold" CharacterCasing="Upper" Margin="443,20,70,815" />
-        <ListView Margin="-2,128,-2,0" FontFamily="Times New Roman" FontSize="24" FontWeight="Bold" Name="tickerListView"  Background="Transparent" BorderThickness="0">
+        <TextBox Name="txtBoxTicker" ForceCursor="True" Width="75" Visibility="Hidden" Height="25" FontFamily="Times New Roman" TextAlignment="Center" FontSize="18" FontWeight="Bold" CharacterCasing="Upper" Margin="443,20,65,815" />
+        <ListView Margin="-2,128,-2,0" MouseDoubleClick="DeleteAlarm" FontFamily="Times New Roman" FontSize="24" FontWeight="Bold" Name="tickerListView"  Background="Transparent" BorderThickness="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Ticker" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="Name" Loaded="ColorName" FontSize="20" Text="{Binding Name}" Foreground="White" TextAlignment="Center" />
+                                <TextBlock x:Name="Name" Margin="25,0,0,0" Loaded="ColorName" FontSize="20" Text="{Binding Name}" Foreground="Black" TextAlignment="Center" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Current Price" Width="160">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="CurrPrice" Loaded="ColorPrice" FontSize="20" Text="{Binding CurrPrice}" Foreground="White" TextAlignment="Center" />
+                                <TextBlock x:Name="CurrPrice" Margin="50,0,0,0" Loaded="ColorPrice" FontSize="20" Text="{Binding CurrPrice}" Foreground="Black" TextAlignment="Center" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Open Price" Width="160">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="OpenPrice" FontSize="20" Text="{Binding OpenPrice}" Foreground="White" TextAlignment="Center" />
+                                <TextBlock x:Name="OpenPrice" Margin="50,0,0,0" FontSize="20" Text="{Binding OpenPrice}" Foreground="Black" TextAlignment="Center" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Volume" Width="162">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="Volume" Padding="5" FontSize="20" Text="{Binding Volume}" Foreground="White" TextAlignment="Center"/>
+                                <TextBlock x:Name="Volume" Margin="50,0,0,0" Padding="5" FontSize="20" Text="{Binding Volume}" Foreground="Black" TextAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
