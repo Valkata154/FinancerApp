@@ -18,28 +18,30 @@ using System.Timers;
 
 namespace Financer
 {
-    /// <summary>
-    /// Interaction logic for WatchlistWindow.xaml
-    /// </summary>
     public partial class WatchlistWindow : Window
     {
+        // Variables
         private static System.Timers.Timer aTimer;
         private List<Ticker> tickerList = new List<Ticker>();
         private double prevPrice;
         private double currPrice;
         private double openPrice;
+
+        // Initialize the component and start the timer.
         public WatchlistWindow()
         {
             InitializeComponent();
-            SetTimer();
+            StartTimer();
         }
 
+        // OnClosed method to stop the timer thread.
         private void Window_Closed(object sender, EventArgs e)
         {
             aTimer.Stop();
         }
 
-        private void openAddTicker(object sender, RoutedEventArgs e)
+        // Method to toggle visibility on the TextBox and pass the ticker name to be added.
+        private void OpenAddTicker(object sender, RoutedEventArgs e)
         {
             if (!this.txtBoxTicker.IsVisible)
             {
@@ -49,15 +51,15 @@ namespace Financer
             else
             {
                 if (!(this.txtBoxTicker.Text == ""))
-                    getTicker(this.txtBoxTicker.Text);
+                    GetTicker(this.txtBoxTicker.Text);
                 this.txtBoxTicker.Visibility = Visibility.Hidden;
                 this.txtBoxTicker.Text = "";
             }
         }
 
-        private async void getTicker(string name)
+        // Method to create the ticker from YahooFinance and add it to a list.
+        private async void GetTicker(string name)
         {
-           
             var securities = await Yahoo.Symbols(name).Fields(Field.Symbol, Field.RegularMarketPrice, Field.RegularMarketVolume, Field.RegularMarketOpen, Field.FiftyTwoWeekHigh).QueryAsync();
             var aapl = securities[name];
             Ticker ticker = new Ticker();
@@ -69,28 +71,30 @@ namespace Financer
             this.tickerListView.Items.Add(ticker);
         }
 
-        private void SetTimer()
+        // Method to start the 2sec timer and add the function.
+        private void StartTimer()
         {
-            // Create a timer with a two second interval.
             aTimer = new System.Timers.Timer(2000);
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Elapsed += UpdatePrices;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
         }
 
-        private async void OnTimedEvent(Object source, ElapsedEventArgs e)
+        // Method to update the prices of the tickers in the list.
+        private async void UpdatePrices(Object source, ElapsedEventArgs e)
         {
+            // Allows using the thread for multiple purposes.
             this.Dispatcher.Invoke(() =>
             {
                 this.tickerListView.Items.Clear();
             });
+            // For each ticker update the price, reset the listview and add the tickers again.
             foreach (Ticker ticker in tickerList)
             {
                 var securities = await Yahoo.Symbols(ticker.Name).Fields(Field.RegularMarketPrice).QueryAsync();
                 prevPrice = ticker.CurrPrice;
                 openPrice = ticker.OpenPrice;
-                ticker.CurrPrice = securities[ticker.Name].RegularMarketPrice + 1;
+                ticker.CurrPrice = securities[ticker.Name].RegularMarketPrice;
                 this.Dispatcher.Invoke(() =>
                 {
                     currPrice = ticker.CurrPrice;
@@ -98,6 +102,7 @@ namespace Financer
                 });
             }
         }
+        // Method to color the price based on the price from 2 secs ago. Red if lower and green if above the previous 2sec price.
         private void ColorPrice(object sender, RoutedEventArgs e)
         {
             if (prevPrice < currPrice)
@@ -111,6 +116,7 @@ namespace Financer
             openPrice = 0;
         }
 
+        // Method to color the name. Red if the price is lower than the open price, green if above the open price.
         private void ColorName(object sender, RoutedEventArgs e)
         {
             if (openPrice < currPrice)
@@ -122,17 +128,18 @@ namespace Financer
             openPrice = 0;
         }
 
-        private  string FormatNumber(long num)
+        // Method to format the volume into millions and hundreds.
+        private string FormatNumber(long num)
         {
             long i = (long)Math.Pow(10, (int)Math.Max(0, Math.Log10(num) - 2));
             num = num / i * i;
 
             if (num >= 1000000000)
-                return (num / 1000000000D).ToString("0.##") + "B";
+                return (num / 1000000000D).ToString("0.##") + " B";
             if (num >= 1000000)
-                return (num / 1000000D).ToString("0.##") + "M";
+                return (num / 1000000D).ToString("0.##") + " M";
             if (num >= 1000)
-                return (num / 1000D).ToString("0.##") + "K";
+                return (num / 1000D).ToString("0.##") + " K";
 
             return num.ToString("#,0");
         }

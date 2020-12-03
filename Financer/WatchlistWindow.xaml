@@ -13,7 +13,7 @@
     </Window.Background>
     <Grid Name="Grid">
         <Label Content="Watchlist" Name="lblTitle" Foreground="White" FontFamily="Times New Roman" FontSize="42" FontWeight="Bold" Margin="197,10,204,800" />
-        <Button Name="btnAddTicker" IsDefault="True" Click="openAddTicker"  Background="Transparent" BorderThickness="0" Width="35" Height="35" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 15, 15, 0">
+        <Button Name="btnAddTicker" IsDefault="True" Click="OpenAddTicker"  Background="Transparent" BorderThickness="0" Width="35" Height="35" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 15, 15, 0">
             <StackPanel>
                 <Image Source="Images/addButton.png"/>
             </StackPanel>

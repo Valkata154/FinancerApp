@@ -25,10 +25,17 @@ namespace Financer
             InitializeComponent();
         }
 
-        private void openWatchlist(object sender, RoutedEventArgs e)
+        private void OpenWatchlist(object sender, RoutedEventArgs e)
         {
             WatchlistWindow watchWin = new WatchlistWindow();
             watchWin.Show();
+        }
+
+        private void CreateAlarm(object sender, RoutedEventArgs e)
+        {
+            AlarmWindow alarmWin = new AlarmWindow();
+            alarmWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            alarmWin.Show();
         }
     }
 }

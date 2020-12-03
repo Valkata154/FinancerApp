@@ -1,0 +1,17 @@
+﻿<Window x:Class="Financer.AddAlarmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Financer"
+        mc:Ignorable="d"
+        Closed="Window_Closed"
+        Title="Add Alarm" Background="LightGray" Height="175" Width="200">
+    <Grid>
+        <Label Content="Ticker" Name="lblTicker" Foreground="Black" FontFamily="Times New Roman"  FontSize="18" Margin="0,10,66,70"/>
+        <Label Content="Price" Name="lblPrice" Foreground="Black" FontFamily="Times New Roman"  FontSize="18" Margin="0,49,66,31" RenderTransformOrigin="0.502,1.379"/>
+        <TextBox Name="textBoxTicker" CharacterCasing="Upper" Margin="68,15,10,95" BorderThickness="2" BorderBrush="Black" FontFamily="Times New Roman"  FontSize="18" TextAlignment="Center"></TextBox>
+        <TextBox Name="textBoxPrice" Margin="68,55,10,55" BorderThickness="2" BorderBrush="Black" FontFamily="Times New Roman"  FontSize="18" TextAlignment="Center"></TextBox>
+        <Button Content="Add"  BorderBrush="Black" BorderThickness="2" Name="btnAddAlarm" Click="AddAlarm" Height="30" Background="White" FontWeight="Bold" FontSize="14"  Margin="32,95,33,7"/>
+    </Grid>
+</Window>

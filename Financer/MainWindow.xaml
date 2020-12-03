@@ -9,6 +9,7 @@
         ResizeMode="NoResize">
     <Grid>
         <Label Content="Financer" Name="lblTitle" Margin="325,0,0,25" FontFamily="Times New Roman" FontSize="30" FontWeight="Bold" />
-        <Button Content="Open Watchlist" Name="btnOpenWatchlist" Click="openWatchlist" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="325,69,329,290"/>
+        <Button Content="Open Watchlist" Name="btnOpenWatchlist" Click="OpenWatchlist" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="325,69,329,290"/>
+        <Button Content="Alarms" Name="btnCreateAlarm" Click="CreateAlarm" Width="110" Height="40" Background="Transparent" FontWeight="Bold" FontSize="14"  Margin="325,130,329,240"/>
     </Grid>
 </Window>
